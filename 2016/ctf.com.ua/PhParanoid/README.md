@@ -4,43 +4,43 @@
 
 `RU: Я настоящий параноик! Я прячу все от этого сумасшедшего мира! Я уже обфусцировал исходники своего калькулятора, сорцы javascript` `а на своем сайте, и я не намерен останавливаться! А ты никогда так и не узнаешь, что же я скрываю!`
 
-![task](imgs\task.png)
+![task](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/task.png)
 
-Ну что ж начнем! Скачиваем файл `PhParanoid_b7fa460590b3dc2a7662dc0bb633a7d8.phb`  по ссылке и начинаем анализ. 
+Ну что ж начнем! Скачиваем файл `PhParanoid_b7fa460590b3dc2a7662dc0bb633a7d8.phb`  по [ссылке](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/files/PhParanoid_b7fa460590b3dc2a7662dc0bb633a7d8.phb) и начинаем анализ. 
 
 Текст задания наводит на то, что нам пердстоит разобраться с некой обфусцированной страницей, в данном случае случае это php страница. Но при просмотре содержимого страницы посредством hexviewer, замечаем сигнаруту компилятора используемого для данной страницы. 
 
-![VirtualBox_Kali2016.2_03_10_2016_20_28_35](imgs\VirtualBox_Kali2016.2_03_10_2016_20_28_35.png)
+![VirtualBox_Kali2016.2_03_10_2016_20_28_35](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_Kali2016.2_03_10_2016_20_28_35.png)
 
 Видим что используется некий **bcompiler v0.18** , значит код php скомпилирован и испольняется некую прослойку, которая умеет выполнять такой байт-код. Но теперь встает вопрос, как же можно прочитать содержимое. Google как обычно в помощь, ищем нформацию по такого рода компилятору для PHP. В ходе гугления нахожу пост на StackOverflow.
 
-![bcompiler](imgs\bcompiler.png)
+![bcompiler](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/bcompiler.png)
 
  На котором ответ на реальный вопрос о декомпиляции заработал всего один голос, печально. В посте ссылки на форум, в одном из постов которого люди поделились декомпилятром и похоже что это то что нужно. 
 
-![forum1](imgs\forum1.png)
+![forum1](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/forum1.png)
 
 Иду на форум и регистрируюсь. Перехожу по ссылке на пост и вижу описание ПО для декомпиляции. Но тут есть две версии декомпилятора, для Php 5.2 и Php 5.3. Чтобы решить, какой нужно скачать, нужно снова внимательно глянуть в hex содержимое phb файла. 
 
-![VirtualBox_Kali2016.2_03_10_2016_20_34_22](imgs\VirtualBox_Kali2016.2_03_10_2016_20_34_22.png)
+![VirtualBox_Kali2016.2_03_10_2016_20_34_22](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_Kali2016.2_03_10_2016_20_34_22.png)
 
 Видим интересный путь в значении которого есть упоминание о версии `php` и это `php5.2`. Качаем версию для php5.2 - это [ModeBIphp52ts.rar](http://board.deioncube.in/attachment.php?aid=3868). Далее, следуя из описания, нам нужна будет Windows. Благо у меня есть различные виртуалки c виндой и я выбрал виртуалку с Windows XP. 
 
-![forum2](imgs\forum2.png)
+![forum2](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/forum2.png)
 
 Скачиваем архив в виртуалку с WinXP, а также сам файл phb для того чтобы декомпилировать его. 
 
-![VirtualBox_WinXPVLx86_Guest_03_10_2016_20_37_36](imgs\VirtualBox_Êëîí WinXPVLx86_Guest_03_10_2016_20_37_36.png)
+![VirtualBox_WinXPVLx86_Guest_03_10_2016_20_37_36](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_WinXPVLx86_Guest_03_10_2016_20_37_36.png)
 
 После скачивания архива с декомпилятором, распаковываем его и видим файлы представленные на скриншоте выше. У нас имеется версия php.exe интерпретатора PHP под Windows.  В итоге после нескольких проб и ошибок - понял как запускать декомпиляцию, при помощи следущей команды:
 
 `php.exe phpdc.phpr PhParanoid_b7fa460590b3dc2a7662dc0bb633a7d8.phb`
 
-![VirtualBox_WinXPVLx86_Guest_03_10_2016_20_41_51](imgs\VirtualBox_WinXPVLx86_Guest_03_10_2016_20_41_51.png)
+![VirtualBox_WinXPVLx86_Guest_03_10_2016_20_41_51](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_WinXPVLx86_Guest_03_10_2016_20_41_51.png)
 
 В итоге если не перенаправлять ввод в файл, то можно увидет следующую картину в консоле:
 
-![VirtualBox_WinXPVLx86_Guest_03_10_2016_20_42_23](imgs\VirtualBox_Êëîí WinXPVLx86_Guest_03_10_2016_20_42_23.png)
+![VirtualBox_WinXPVLx86_Guest_03_10_2016_20_42_23](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_WinXPVLx86_Guest_03_10_2016_20_42_23.png)
 
 Оххх класс! Видим что декомпилятор сработал отлично и мы видим обычный PHP код, который можно прочитать и выполнить. В итоге после декомпиляции получаем слудующий кусок кода страницы:
 
@@ -385,7 +385,7 @@ do {
 
 Значит нам следует понять как получить строку `$secret` . Из листинга кода видно что идет проверка кодов символов на соответсвие определенному значению, к примеру `if ((ord($c44) + (-79)) != 46) {` . Значит у нас имеются коды символов секрета! Так превратим же их в читаемую строку, при помощи bash скрипта и python.
 
-![VirtualBox_Kali2016.2_03_10_2016_21_08_53](imgs\VirtualBox_Kali2016.2_03_10_2016_21_08_53.png)
+![VirtualBox_Kali2016.2_03_10_2016_21_08_53](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_Kali2016.2_03_10_2016_21_08_53.png)
 
 Выполним вот эту команду `python -c "print ''.join([chr(x) for x in $(echo "[$(cat decoded.txt | grep -o -P '(?<=\!\=).*(?=\))' | tr '\n' ',' | sed 's/,$//')]")])"`  которая парсит значения между `!=` и `)` , а затем при помощи python получаем строку из этих кодов символов секрета. В итоге у нас получается значение секрета: 
 
@@ -397,7 +397,7 @@ do {
 
 Таким образом мы проходимся по каждому символу нашего секрета и производим операцию сложени для каждого кода символа и числом, которое используется для проверки соответствия с секретом. Таким образом мы восставновим строку с флагом. 
 
-![VirtualBox_Kali2016.2_03_10_2016_21_35_45](imgs\VirtualBox_Kali2016.2_03_10_2016_21_35_45.png)
+![VirtualBox_Kali2016.2_03_10_2016_21_35_45](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/PhParanoid/imgs/VirtualBox_Kali2016.2_03_10_2016_21_35_45.png)
 
 Урааа у нас получилось! Вот он - `h4ck1t{O0h_0pC0D35_G0t_1N51D3_MiN3_51CK_M1nD}` !!! 
 
