@@ -4,11 +4,11 @@
 
 `RU: Эксперт в области Информационной безопасности начал создавать уроки для киберармии, но он по иронии судьбы оказался шпионом! Вам приказали проверить один из его видеоуроков на предмет передачи секретной информации.`
 
- ![intro2](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsintro2.png)
+ ![intro2](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/intro2.png)
 
 И так, нам предстоит исследовать avi файл. Для этого скачаем его и попробуем посмотреть что же там такого есть, что можно увидеть невооруженным взглядом и запускаем.
 
- ![avi](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsavi.png)
+ ![avi](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/avi.png)
 
 Видим забавный ролик, где свинюшки пытаются что то сделать с ПК, но сразу же заметно, что звук отстает от изображения вполне прилично. Скорее всего что то в звуковой дорожке, но для начала нужно понять что же есть в скрытом содержимом AVI файла. AVI файл представляет из себя последовательность изображений.
 
@@ -16,11 +16,11 @@
 
 Этой командой мы получаем большое кол-во PNG файлов пронумерованных по кол-ву кадров.
 
-![VirtualBox_Kali2016.2_25_09_2016_15_59_31](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsVirtualBox_Kali2016.2_25_09_2016_15_59_31.png)
+![VirtualBox_Kali2016.2_25_09_2016_15_59_31](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/VirtualBox_Kali2016.2_25_09_2016_15_59_31.png)
 
 При выполнении данной команды также в глаза бросается ссылка из метаданных AVI файла, которая как бы намекает на то, что по этому адресу содержится некая копия. При помощи этой копии мы возможно сможем сравнить файлы покадрово и получить информацию. Идем и качаем данный файл по ссылке и запускаем его чтобы посмотреть что же там.
 
- ![hehehe](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgshehehe.png)
+ ![hehehe](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/hehehe.png)
 
 Видим туже самую картину, но что забавно в этой версии звук и картинка впорядке. Значит предполагаем что это исходный файл. Также проделываем над этим файлом операцию по извлечению кадров. Теперь у нас имеются две папки с изображениями кадров.
 
@@ -28,19 +28,19 @@
 
 Выполняем команду `python ~/tools/binwally/binwally.py avi_avi/ hehehe_avi/` и тут же видим результат:
 
-![VirtualBox_Kali2016.2_04_10_2016_21_17_31](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsVirtualBox_Kali2016.2_04_10_2016_21_17_31.png)
+![VirtualBox_Kali2016.2_04_10_2016_21_17_31](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/VirtualBox_Kali2016.2_04_10_2016_21_17_31.png)
 
 И прокрутив ниже вижим что кадр под номером 174 отличается.
 
-![VirtualBox_Kali2016.2_04_10_2016_21_17_58](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsVirtualBox_Kali2016.2_04_10_2016_21_17_58.png)
+![VirtualBox_Kali2016.2_04_10_2016_21_17_58](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/VirtualBox_Kali2016.2_04_10_2016_21_17_58.png)
 
 Ну и конечно же на ум приходит сразу мысль, используя инструменты для детекта стего попробовать найти что нибудь интересное. Исползуя `ztego` пробуем посмотреть что можно увидеть.
 
-![VirtualBox_Kali2016.2_25_09_2016_22_17_11](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsVirtualBox_Kali2016.2_25_09_2016_22_17_11.png)
+![VirtualBox_Kali2016.2_25_09_2016_22_17_11](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/VirtualBox_Kali2016.2_25_09_2016_22_17_11.png)
 
 Но собствено говоря ничего интересного не получается обнаружить. Так что в дело вступает брутфорс всех возможных способов. Предположили что можно сравнить две картинки и выявить отличающиеся пиксели и при помощи ImageMagiс инструментов получилаьс вот такая каринка.
 
- ![photo_2016-10-04_21-25-14](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsphoto_2016-10-04_21-25-14.jpg)
+ ![photo_2016-10-04_21-25-14](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/photo_2016-10-04_21-25-14.jpg)
 
 В верхней части изображения видна светлая полоска из точек - это как раз отличающиеся пиксели. Но при дальнейшем размышлении ошибочно предположили, что нужно использовать, только отличающиеся RGB данные пикселей, в итоге ничего внятного из информации не получалось.
 
@@ -50,7 +50,7 @@
 
 В итоге получается вот такой вывод:
 
-![VirtualBox_Kali2016.2_04_10_2016_20_59_59](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsVirtualBox_Kali2016.2_04_10_2016_20_59_59.png)
+![VirtualBox_Kali2016.2_04_10_2016_20_59_59](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/VirtualBox_Kali2016.2_04_10_2016_20_59_59.png)
 
 Вот текстовое представление разниц между пикселями (т.е. для каждого пикселя тут три значения разница R, разница G и разница B, таким  образом для первого пикселя получается 0 0 1 - т.е. разница в B значении (R и G не отличаются), ну и так далее по аналогии):
 
@@ -92,11 +92,11 @@ print binstr
 
 Поглядев на строки с нулями и единицами, решил что нужно попытать счастье и попробовать преобразовать эту вереницу 1 и 0 в текст при помощи одно из онлайн сервисов и вот что получилось:
 
-![bin_to_brain_fuck](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsbin_to_brain_fuck.png)
+![bin_to_brain_fuck](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/bin_to_brain_fuck.png)
 
 Видим что перед нами ни что иное как `brainfuck` код. Для того чтобы проверить данное утверждение, пробуем также воспользоваться также онлайн сервисом и вот что получается.
 
-![brainfuck_to_flag](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsbrainfuck_to_flag.png)
+![brainfuck_to_flag](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/brainfuck_to_flag.png)
 
 И радости нет предела! Видим флаг и конечно же получаем +450 поинтов!
 
@@ -148,6 +148,6 @@ print len(line)
 
 Вывод после выполнения кода следующий:
 
-![VirtualBox_Kali2016.2_04_10_2016_22_51_04](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgsVirtualBox_Kali2016.2_04_10_2016_22_51_04.png)
+![VirtualBox_Kali2016.2_04_10_2016_22_51_04](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/ctf.com.ua/Suspicious_AVI/imgs/VirtualBox_Kali2016.2_04_10_2016_22_51_04.png)
 
 **Автор: n0z3r0**
