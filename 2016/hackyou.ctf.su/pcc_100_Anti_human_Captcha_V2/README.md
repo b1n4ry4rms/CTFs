@@ -2,13 +2,13 @@
 
 Условие задачи:
 
- ![task](imgs\task.png)
+ ![task](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/pcc_100_Anti_human_Captcha_V2/imgs/task.png)
 
 У нас есть ссылка и мощная мотивация доказать, что мы не жалкие люди :). Заступимся за человечество в этом задании! 
 
 Переходим по ссылке и видим:
 
- ![captcha](imgs\captcha.png)
+ ![captcha](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/pcc_100_Anti_human_Captcha_V2/imgs/captcha.png)
 
 Быстренько идем и декодируем значение, пробуем вставить полученное значение:
 
@@ -20,7 +20,7 @@ root@kali:~/#
 
 Вставляем и .....
 
- ![rogots_laughing](imgs\rogots_laughing.png)
+ ![rogots_laughing](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/pcc_100_Anti_human_Captcha_V2/imgs/rogots_laughing.png)
 
 видим издевательскую насмешку бездушных машин! Типа ты слишком медленный, не смог справиться за 3 секунды! :) Эхх подумал я, нужно снова призвать на помощь машины! И тут на помощь конечно же спешит **scrapy**!
 
@@ -62,7 +62,7 @@ class Ppc100spiderSpider(scrapy.Spider):
 
 При тестовой отправке ответа, замечаем как называется параметр, в котором нужно отправить данные.
 
- ![aswer_param](imgs\aswer_param.png)
+ ![aswer_param](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/pcc_100_Anti_human_Captcha_V2/imgs/aswer_param.png)
 
 В нашем пауке учитываем этот момент строкой кода `frmdata = {'answer': data}` и отправляем `POST` запрос при помощи `FormRequest`. Перед отправкой, получение base64 данных, осуществляется в строке кода `response.css('code::text').extract_first()` ну и декодирование данных осуществляется тут `data = base64.b64decode(b64)` 
 
@@ -72,7 +72,7 @@ class Ppc100spiderSpider(scrapy.Spider):
 scrapy runspider ppc100spider.py -o ppc100.json
 ```
 
- ![VirtualBox_Kali2016.2_29_10_2016_18_02_12](imgs\VirtualBox_Kali2016.2_29_10_2016_18_02_12.png)
+ ![VirtualBox_Kali2016.2_29_10_2016_18_02_12](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/pcc_100_Anti_human_Captcha_V2/imgs/VirtualBox_Kali2016.2_29_10_2016_18_02_12.png)
 
 В выводе спайдера, можно увидеть информацию, полученную после отправки `POST` запроса. Тоже самое уже в более читабельном виде видно в `ppc100.json`, так как мы указали пауку вывести данные в `json` файл.
 
