@@ -2,17 +2,17 @@
 
 Перед нами условие задачи:
 
- ![task](imgs\task.png)
+ ![task](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/task.png)
 
 И перед нами файлик с собранным трафиком, хм и еще сопутствующая информация! Мол перехватили тут для нас кое какую информацию. Спасибо большое :) 
 
 Приступим к анализу `pcap` файла, для этого нам поможет `Wireshark`
 
-![WEB_100_1](imgs\WEB_100_1.png)
+![WEB_100_1](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/WEB_100_1.png)
 
 Видим что и вправду записан HTTP трафик, первое что приходит в голову это конечно же `Follow HTTP stream`. Если воспользоваться командой `Follow TCP steam` то gzip данные не будут декодированы, так что это надо иметь ввиду.
 
- ![WEB_100_2](imgs\WEB_100_2.png)
+ ![WEB_100_2](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/WEB_100_2.png)
 
 Тут много информации в выводе команды, листаем в самый низ, походу замечаем, что используется basic авторизация и человек реально пытается войти и несколько раз вводит разные пароли и вот под конец файла, у него получается наконец-то войти. Мы также видим, что пользователь проходит на страницу и видит интересное содержимое! Вроде бы кажется, что вот по этой ссылке пройдешь и получишь флаг. 
 
@@ -20,21 +20,21 @@
 
 Выполним команду `echo -e cmVhZGVyOnA0JCR3b3JkVEhOT1EwbjJEMQ== | base64 -d; echo ''`  в итоге получаем вывод:
 
- ![VirtualBox_Kali2016.2_29_10_2016_16_04_34](imgs\VirtualBox_Kali2016.2_29_10_2016_16_04_34.png)
+ ![VirtualBox_Kali2016.2_29_10_2016_16_04_34](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/VirtualBox_Kali2016.2_29_10_2016_16_04_34.png)
 
 Таким образом у нас есть `логин:пароль` и из дампа, а также мы видим URL по которому нужно пройти - это конечно же `http://hackyou-web100.ctf.su` 
 
 Ну что ж, пойдем по этой ссылке и поглядим, как там будет дело обстоять.
 
-  ![basic_auth_prompt](imgs\basic_auth_prompt.png)
+  ![basic_auth_prompt](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/basic_auth_prompt.png)
 
 И нас встречает до боли родной basic auth диалог авторизации. Пароль и логин мы знаем, входим!
 
- ![500_files](imgs\500_files.png)
+ ![500_files](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/500_files.png)
 
 И тут нас ждет разоварование! Очень много файлов на странице и нет даже намека, что вообще где-то расположен файл flag.txt. Поиск по его размеру ничего не дает. И вообще содержимое файлов вот такое:
 
- ![file_confuse](imgs\file_confuse.png)
+ ![file_confuse](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/file_confuse.png)
 
 Мда и такая картина с разлиным размером очень похожего текста, при просмотре следующих файлов из списка. Это какой-то ад :) просматривать это все вручную не реально и тут я вспомнил что есть же `scrapy`, которым можно быстренько пройтись по всем ссылкам и вытащить инфу! 
 
@@ -164,7 +164,7 @@ cat web100.json | grep flag
 
 И сразу же находится одна строка со следующим содержимым:
 
-![flag](imgs\flag.png)
+![flag](https://github.com/b1n4ry4rms/CTFs/blob/master/2016/hackyou.ctf.su/web_100_reader/imgs/flag.png)
 
 Вот такой вот текст запутывающий :) если бы не автоматизация думаю что можно было бы пропустить запросто, просматривая вручную все файлы. Вот так вот автоматизация рулит и это еще раз доказывает решение вот таких задач на CTFах. Спасибо авторам Scrapy!
 
